@@ -39,6 +39,7 @@
             this.BtnSuspend = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.LabelProgress = new System.Windows.Forms.Label();
+            this.BtnResume = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -105,7 +106,7 @@
             // 
             // BtnAbort
             // 
-            this.BtnAbort.Location = new System.Drawing.Point(360, 87);
+            this.BtnAbort.Location = new System.Drawing.Point(384, 87);
             this.BtnAbort.Name = "BtnAbort";
             this.BtnAbort.Size = new System.Drawing.Size(75, 23);
             this.BtnAbort.TabIndex = 7;
@@ -115,18 +116,19 @@
             // 
             // BtnSuspend
             // 
-            this.BtnSuspend.Location = new System.Drawing.Point(258, 87);
+            this.BtnSuspend.Location = new System.Drawing.Point(222, 87);
             this.BtnSuspend.Name = "BtnSuspend";
             this.BtnSuspend.Size = new System.Drawing.Size(75, 23);
             this.BtnSuspend.TabIndex = 8;
             this.BtnSuspend.Text = "Suspend";
             this.BtnSuspend.UseVisualStyleBackColor = true;
+            this.BtnSuspend.Click += new System.EventHandler(this.BtnSuspend_Click);
             // 
             // progressBar1
             // 
             this.progressBar1.Location = new System.Drawing.Point(50, 87);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(192, 23);
+            this.progressBar1.Size = new System.Drawing.Size(166, 23);
             this.progressBar1.TabIndex = 9;
             // 
             // LabelProgress
@@ -138,11 +140,22 @@
             this.LabelProgress.TabIndex = 10;
             this.LabelProgress.Text = "0%";
             // 
+            // BtnResume
+            // 
+            this.BtnResume.Location = new System.Drawing.Point(303, 87);
+            this.BtnResume.Name = "BtnResume";
+            this.BtnResume.Size = new System.Drawing.Size(75, 23);
+            this.BtnResume.TabIndex = 11;
+            this.BtnResume.Text = "Resume";
+            this.BtnResume.UseVisualStyleBackColor = true;
+            this.BtnResume.Click += new System.EventHandler(this.BtnResume_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(556, 122);
+            this.Controls.Add(this.BtnResume);
             this.Controls.Add(this.LabelProgress);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.BtnSuspend);
@@ -176,6 +189,7 @@
         private System.Windows.Forms.Button BtnSuspend;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label LabelProgress;
+        private System.Windows.Forms.Button BtnResume;
     }
 }
 

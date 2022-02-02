@@ -14,6 +14,8 @@ namespace Threads
 {
     public partial class Form1 : Form
     {
+        FileStream fsOut;
+        FileStream fsIn;
         //BackgroundWorker worker = new BackgroundWorker();
         Thread t;
     
@@ -38,22 +40,28 @@ namespace Threads
 
         #endregion
 
-        void CopyFile ()
+        void CloseFileAndFolder()
         {
-             FileStream fsOut = new FileStream(TxtBoxTo.Text, FileMode.Create);// to Task Folder
-            FileStream fsIn = new FileStream(TxtBoxFrom.Text, FileMode.Open);
-            byte [] buffer = new byte[1048576];//1MB
-            int readbyte/* = fsIn.Read(buffer, 0, buffer.Length)*/;
-
-            while((readbyte=fsIn.Read(buffer, 0, buffer.Length)) > 0)
-            {
-                Thread.Sleep(100);
-                fsOut.Write(buffer, 0, readbyte);
-                ProgressPosition((int)(fsIn.Position*100/ fsIn.Length));
-                //worker.ReportProgress((int)(fsIn.Position*100/ fsIn.Length));
-            }
             fsIn.Close();
             fsOut.Close();
+        }
+
+        void CopyFile ()
+        {
+            fsOut = new FileStream(TxtBoxTo.Text, FileMode.Create);// to Task Folder
+            fsIn = new FileStream(TxtBoxFrom.Text, FileMode.Open);
+            byte[] buffer = new byte[1048576];//1MB
+            int readbyte/* = fsIn.Read(buffer, 0, buffer.Length)*/;
+            do
+            {
+                readbyte=fsIn.Read(buffer, 0, buffer.Length);
+                fsOut.Write(buffer, 0, readbyte);
+                Thread.Sleep(100);
+                //ProgressPosition((int)(fsIn.Position*100/ fsIn.Length));
+                //worker.ReportProgress((int)(fsIn.Position*100/ fsIn.Length));
+            } while (readbyte > 0) ;
+            CloseFileAndFolder();
+
         }
 
 
@@ -88,14 +96,33 @@ namespace Threads
 
         private void BtnCopy_Click(object sender, EventArgs e)
         {
+            
             //worker.RunWorkerAsync();
-            CopyFile();
+            t = new Thread(CopyFile);
+            t.Start();
+            //CopyFile();
         }
 
         private void BtnAbort_Click(object sender, EventArgs e)
         {
+            //Exception
             t.Abort();
+            ProgressPosition(0);
+            CloseFileAndFolder();
             //worker.ReportProgress(0);
         }
+
+        [Obsolete]
+        private void BtnSuspend_Click(object sender, EventArgs e)
+        {
+            t.Suspend();
+        }
+
+        [Obsolete]
+        private void BtnResume_Click(object sender, EventArgs e)
+        {
+            t.Resume();
+        }
+
     }
 }
