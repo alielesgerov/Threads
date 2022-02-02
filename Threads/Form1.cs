@@ -16,17 +16,11 @@ namespace Threads
     {
         FileStream fsOut;
         FileStream fsIn;
-        //BackgroundWorker worker = new BackgroundWorker();
         Thread t;
     
         public Form1()
         {
             InitializeComponent();
-            //worker.WorkerSupportsCancellation=true;
-            //worker.WorkerReportsProgress=true;
-
-            //worker.ProgressChanged +=Worker_ProgressChanged;
-            //worker.DoWork += Worker_DoWork;
         }
 
         #region ProgressCalc
@@ -48,33 +42,20 @@ namespace Threads
 
         void CopyFile ()
         {
-            fsOut = new FileStream(TxtBoxTo.Text, FileMode.Create);// to Task Folder
+            fsOut = new FileStream(TxtBoxTo.Text, FileMode.Create);
             fsIn = new FileStream(TxtBoxFrom.Text, FileMode.Open);
             byte[] buffer = new byte[1048576];//1MB
-            int readbyte/* = fsIn.Read(buffer, 0, buffer.Length)*/;
+            int readbyte;
             do
             {
                 readbyte=fsIn.Read(buffer, 0, buffer.Length);
                 fsOut.Write(buffer, 0, readbyte);
                 Thread.Sleep(100);
-                //ProgressPosition((int)(fsIn.Position*100/ fsIn.Length));
-                //worker.ReportProgress((int)(fsIn.Position*100/ fsIn.Length));
+
             } while (readbyte > 0) ;
             CloseFileAndFolder();
 
         }
-
-
-        //private void Worker_DoWork(object sender, DoWorkEventArgs e)
-        //{
-        //    CopyFile();
-        //}
-
-        //private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        //{
-        //    progressBar1.Value=e.ProgressPercentage;
-        //    LabelProgress.Text = e.ProgressPercentage.ToString()+"%" ;
-        //}
 
         private void BtnFile1_Click(object sender, EventArgs e)
         {
@@ -97,7 +78,6 @@ namespace Threads
         private void BtnCopy_Click(object sender, EventArgs e)
         {
             
-            //worker.RunWorkerAsync();
             t = new Thread(CopyFile);
             t.Start();
             //CopyFile();
@@ -105,23 +85,42 @@ namespace Threads
 
         private void BtnAbort_Click(object sender, EventArgs e)
         {
-            //Exception
-            t.Abort();
-            ProgressPosition(0);
-            CloseFileAndFolder();
-            //worker.ReportProgress(0);
+            try
+            {
+                t.Abort();
+                ProgressPosition(0);
+                CloseFileAndFolder();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         [Obsolete]
         private void BtnSuspend_Click(object sender, EventArgs e)
         {
-            t.Suspend();
+            try
+            {
+                t.Suspend();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         [Obsolete]
         private void BtnResume_Click(object sender, EventArgs e)
         {
-            t.Resume();
+            try
+            {
+                t.Resume();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
     }
