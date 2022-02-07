@@ -39,16 +39,15 @@ public partial class Form1 : Form
         {
             _fsOut = new FileStream(TxtBoxTo.Text, FileMode.Create);
             _fsIn = new FileStream(TxtBoxFrom.Text, FileMode.Open);
-            byte[] buffer = new byte[1048576];//1MB
+            var buffer = new byte[1048576];//1MB
             int readbyte;
-            do
+            while ((readbyte=_fsIn.Read(buffer, 0, buffer.Length)) > 0)
             {
-                readbyte=_fsIn.Read(buffer, 0, buffer.Length);
                 _fsOut.Write(buffer, 0, readbyte);
                 Thread.Sleep(1000);
                 ProgressPosition((int)(_fsIn.Position*100/_fsIn.Length));
 
-            } while (readbyte > 0);
+            }
             CloseFileAndFolder();
         }
         catch (Exception ex)
@@ -84,6 +83,7 @@ public partial class Form1 : Form
         try
         {
             _t = new Thread(CopyFile);
+            _t.IsBackground = true;
             _t.Start();
         }
         catch (Exception ex)
@@ -133,6 +133,5 @@ public partial class Form1 : Form
             MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
-
 }
 
