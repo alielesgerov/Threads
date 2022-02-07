@@ -20,8 +20,16 @@ public partial class Form1 : Form
 
     public void ProgressPosition(int precentage)
     {
-        progressBar1.Value=precentage;
-        LabelProgress.Text = precentage.ToString()+@"%";
+        if (progressBar1.InvokeRequired)
+        {
+            progressBar1.BeginInvoke(new Action(() => progressBar1.Value = precentage));
+            LabelProgress.BeginInvoke(new Action(() => LabelProgress.Text = precentage.ToString()+@"%"));
+        }
+        else
+        {
+            progressBar1.Value=precentage;
+            LabelProgress.Text = precentage.ToString()+@"%";
+        }
 
     }
 
